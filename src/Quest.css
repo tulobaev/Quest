@@ -1,0 +1,181 @@
+/* Quest.css — стили для основного контейнера квеста и прогресс-бара */
+
+/* Общий контейнер всего квеста */
+.quest-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  min-height: calc(100vh - 80px);
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Прогресс-бар (верхняя панель) */
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(240, 249, 255, 0.95)
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 1.2rem 2rem;
+  border-radius: 20px;
+  margin-bottom: 2.5rem;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(191, 219, 254, 0.6);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+/* Текст внутри прогресс-бара */
+.progress-text {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.progress-text strong {
+  color: #1d4ed8;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* Подсветка собранного слова */
+.progress-text strong {
+  font-size: 1.9rem;
+  transition: all 0.4s ease;
+}
+
+/* Когда слово полностью собрано */
+.complete-word {
+  color: #c026d3 !important;
+  font-size: 2.3rem !important;
+  background: linear-gradient(90deg, #ec4899, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+  animation: glow-text 2.5s infinite alternate;
+}
+
+@keyframes glow-text {
+  from {
+    text-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
+  }
+  to {
+    text-shadow:
+      0 0 25px rgba(168, 85, 247, 0.6),
+      0 0 40px rgba(192, 38, 211, 0.4);
+  }
+}
+
+/* Искорки при завершении */
+.sparkle {
+  font-size: 2.2rem;
+  margin-left: 0.8rem;
+  animation: sparkleAnim 1.6s infinite;
+}
+
+@keyframes sparkleAnim {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.35) rotate(15deg);
+  }
+}
+
+/* Адаптивность для интерактивной доски и мобильных */
+@media (max-width: 900px) {
+  .progress-bar {
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.3rem;
+  }
+
+  .progress-text strong {
+    font-size: 1.7rem;
+  }
+
+  .complete-word {
+    font-size: 2rem !important;
+  }
+
+  .sparkle {
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .progress-bar {
+    padding: 1.5rem 3rem;
+    font-size: 1.8rem;
+  }
+
+  .progress-text strong {
+    font-size: 2.4rem;
+  }
+
+  .complete-word {
+    font-size: 2.8rem !important;
+  }
+}
+
+.word-progress {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.complete-word {
+  font-size: 2.2rem;
+  background: linear-gradient(90deg, #ec4899, #a855f7, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  letter-spacing: 1px;
+  animation: glow 2.5s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px #f0abfc;
+  }
+  to {
+    text-shadow:
+      0 0 25px #e879f9,
+      0 0 40px #c026d3;
+  }
+}
+
+.sparkle {
+  font-size: 2rem;
+  margin-left: 12px;
+  animation: sparkle 1.8s infinite;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4) rotate(10deg);
+    opacity: 0.8;
+  }
+}

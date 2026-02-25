@@ -1,0 +1,237 @@
+.station5-lesson {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 50%, #80deea 100%);
+  min-height: 100vh;
+  color: #01579b;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  color: #0277bd;
+  margin: 0 0 1rem;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(2, 119, 189, 0.2);
+}
+
+.intro {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  color: #0288d1;
+  margin: 1.5rem 0 3rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.input-area {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.answer-input {
+  width: 100%;
+  padding: 1.5rem 2rem;
+  font-size: 2rem;
+  line-height: 1.6;
+  border: 3px solid #4fc3f7;
+  border-radius: 20px;
+  resize: vertical;
+  min-height: 160px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #01579b;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: #0288d1;
+  box-shadow: 0 0 0 5px rgba(2, 136, 209, 0.25);
+}
+
+.btn.submit {
+  font-size: 2.1rem;
+  padding: 1.2rem 4.5rem;
+  background: linear-gradient(90deg, #0288d1, #039be5);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  box-shadow: 0 8px 20px rgba(2, 136, 209, 0.35);
+  transition: all 0.3s;
+}
+
+.btn.submit:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(2, 136, 209, 0.45);
+}
+
+.btn.submit:disabled {
+  background: #b3e5fc;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.result-area {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.your-answer {
+  background: rgba(255, 255, 255, 0.88);
+  padding: 1.8rem 2.2rem;
+  border-radius: 20px;
+  margin-bottom: 3rem;
+  font-size: 2rem;
+  color: #37474f;
+  border: 1px solid #e0f2f1;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.your-answer h3 {
+  color: #0277bd;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.final-message {
+  padding: 3rem 2.5rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-message::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.final-message.success {
+  background: linear-gradient(135deg, #fff176 0%, #fff59d 100%);
+  border: 3px solid #fdd835;
+  box-shadow: 0 12px 40px rgba(255, 193, 7, 0.3);
+}
+
+.big-check {
+  font-size: clamp(7rem, 18vw, 12rem);
+  color: #4caf50;
+  margin: 0.5rem 0 1.5rem;
+  line-height: 0.8;
+  display: block;
+}
+
+.final-message h2 {
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
+  color: #0277bd;
+  margin: 1rem 0 1.5rem;
+}
+
+.main-lesson {
+  margin: 2rem 0 3rem;
+}
+
+.gold {
+  font-size: 2.2rem;
+  color: #f57f17;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.lesson-text {
+  font-size: clamp(2rem, 4.5vw, 2.6rem);
+  font-weight: 800;
+  color: #d81b60;
+  line-height: 1.35;
+  text-shadow: 1px 1px 2px rgba(216, 27, 96, 0.15);
+}
+
+.final-image {
+  font-size: clamp(4rem, 12vw, 8rem);
+  margin: 2rem 0 3rem;
+  color: #0288d1;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.congrats {
+  font-size: 2.1rem;
+  color: #0277bd;
+  margin-top: 3rem;
+  line-height: 1.5;
+}
+
+.congrats strong {
+  color: #d81b60;
+  font-size: 2.6rem;
+  font-weight: 900;
+}
+
+/* Адаптивность для интерактивной доски и мобильных */
+@media (min-width: 1200px) {
+  h1 {
+    font-size: 5rem;
+  }
+  .lesson-text {
+    font-size: 3rem;
+  }
+  .big-check {
+    font-size: 14rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .station5-lesson {
+    padding: 30px 15px;
+  }
+  h1 {
+    font-size: 3rem;
+  }
+  .intro {
+    font-size: 1.8rem;
+  }
+  .btn.submit {
+    font-size: 1.8rem;
+    padding: 1rem 3rem;
+  }
+}
