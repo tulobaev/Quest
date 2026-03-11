@@ -191,3 +191,31 @@ p {
     font-size: 11rem;
   }
 }
+.arg-card {
+  background: white;
+  border: 2px solid #ab47bc;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  max-width: 320px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+/* эффект при наведении */
+.arg-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* ВЫБРАННЫЙ аргумент */
+.arg-card.selected {
+  background: #c8e6c9;
+  border: 2px solid #2e7d32;
+  color: #1b5e20;
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.25);
+  transform: scale(1.03);
+}

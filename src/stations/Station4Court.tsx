@@ -1,4 +1,3 @@
-// Station4Court.tsx
 import { useState } from "react";
 import "./Station4Court.css";
 
@@ -31,14 +30,33 @@ const argumentsList = [
   },
 ] as const;
 
-type Side = "accusation" | "defense" | null;
+type Side = "accusation" | "defense";
 
 export default function Station4Court({ onSuccess }: Props) {
   const [placements, setPlacements] = useState<Record<number, Side>>({});
+  const [selectedArg, setSelectedArg] = useState<number | null>(null);
 
-  const allPlaced = argumentsList.every(
-    (arg) => placements[arg.id] !== undefined,
-  );
+  const handleSelect = (id: number) => {
+    setSelectedArg(id);
+  };
+
+  const handlePlace = (side: Side) => {
+    if (selectedArg === null) return;
+
+    setPlacements((prev) => ({
+      ...prev,
+      [selectedArg]: side,
+    }));
+
+    setSelectedArg(null);
+  };
+
+  const availableArgs = argumentsList.filter((arg) => !placements[arg.id]);
+
+  const getArgsForSide = (side: Side) =>
+    argumentsList.filter((arg) => placements[arg.id] === side);
+
+  const allPlaced = argumentsList.every((arg) => placements[arg.id]);
 
   const accusationCount = argumentsList.filter(
     (arg) => placements[arg.id] === "accusation",
@@ -48,57 +66,40 @@ export default function Station4Court({ onSuccess }: Props) {
     (arg) => placements[arg.id] === "defense",
   ).length;
 
-  // Успех — если больше аргументов в защиту или поровну
-  // (можно изменить логику на строгое большинство обвинения — если нужно)
   const isSuccess = allPlaced && defenseCount >= accusationCount;
-
-  const handleDrop = (argId: number, side: Side) => {
-    setPlacements((prev) => ({ ...prev, [argId]: side }));
-  };
-
-  const getArgsForSide = (side: Side) =>
-    argumentsList.filter((arg) => placements[arg.id] === side);
 
   return (
     <div className="station4-court">
       <h1>Суд над старухой ⚖️</h1>
       <p>
-        Перетащите каждый аргумент в колонку <strong>Обвинение</strong> или{" "}
-        <strong>Защита</strong>
+        Сначала выберите аргумент, затем нажмите колонку{" "}
+        <strong>Обвинение</strong> или <strong>Защита</strong>
       </p>
 
       <div className="arguments-pool">
         <h2>Аргументы</h2>
+
         <div className="args-list">
-          {argumentsList.map((arg) =>
-            placements[arg.id] ? null : (
-              <div
-                key={arg.id}
-                className="arg-card"
-                draggable
-                onDragStart={(e) => {
-                  e.dataTransfer.setData("argId", arg.id.toString());
-                }}
-              >
-                {arg.text}
-              </div>
-            ),
-          )}
+          {availableArgs.map((arg) => (
+            <div
+              key={arg.id}
+              className={`arg-card ${selectedArg === arg.id ? "selected" : ""}`}
+              onClick={() => handleSelect(arg.id)}
+            >
+              {arg.text}
+            </div>
+          ))}
         </div>
       </div>
 
       <div className="court-board">
-        <div className="column accusation">
+        <div
+          className="column accusation"
+          onClick={() => handlePlace("accusation")}
+        >
           <h2>Обвинение</h2>
-          <div
-            className="drop-zone"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              const argId = Number(e.dataTransfer.getData("argId"));
-              handleDrop(argId, "accusation");
-            }}
-          >
+
+          <div className="drop-zone">
             {getArgsForSide("accusation").map((arg) => (
               <div key={arg.id} className="placed-arg accusation">
                 {arg.text}
@@ -107,17 +108,10 @@ export default function Station4Court({ onSuccess }: Props) {
           </div>
         </div>
 
-        <div className="column defense">
+        <div className="column defense" onClick={() => handlePlace("defense")}>
           <h2>Защита</h2>
-          <div
-            className="drop-zone"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              const argId = Number(e.dataTransfer.getData("argId"));
-              handleDrop(argId, "defense");
-            }}
-          >
+
+          <div className="drop-zone">
             {getArgsForSide("defense").map((arg) => (
               <div key={arg.id} className="placed-arg defense">
                 {arg.text}
@@ -129,7 +123,7 @@ export default function Station4Court({ onSuccess }: Props) {
 
       <div className="control-panel">
         {!allPlaced ? (
-          <p className="info">Расставьте все аргументы</p>
+          <p className="info">Распределите все аргументы</p>
         ) : (
           <div className="result-area">
             {isSuccess ? (
