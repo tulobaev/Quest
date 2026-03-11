@@ -25,24 +25,24 @@ type SeaState = (typeof seaStates)[number];
 type DragItem = { id: number; text: string };
 
 export default function Station1Sea({ onSuccess }: Props) {
-  const [placements, setPlacements] = useState<
-    Record<SeaState, DragItem | null>
-  >(() =>
+  // Функции для начального состояния — удобно использовать при сбросе
+  const getInitialPlacements = () =>
     seaStates.reduce(
       (acc, s) => ({ ...acc, [s]: null }),
       {} as Record<SeaState, DragItem | null>,
-    ),
-  );
+    );
 
-  const [feedback, setFeedback] = useState<
-    Record<SeaState, "ok" | "wrong" | null>
-  >(() =>
+  const getInitialFeedback = () =>
     seaStates.reduce(
       (acc, s) => ({ ...acc, [s]: null }),
       {} as Record<SeaState, "ok" | "wrong" | null>,
-    ),
-  );
+    );
 
+  const [placements, setPlacements] = useState<
+    Record<SeaState, DragItem | null>
+  >(getInitialPlacements());
+  const [feedback, setFeedback] =
+    useState<Record<SeaState, "ok" | "wrong" | null>>(getInitialFeedback());
   const [checked, setChecked] = useState(false);
 
   const allFilled = seaStates.every((s) => placements[s] !== null);
@@ -111,22 +111,11 @@ export default function Station1Sea({ onSuccess }: Props) {
     setChecked(true);
   };
 
+  // Полный сброс за один клик
   const handleRetry = () => {
     setChecked(false);
-    // Полный сброс размещений
-    setPlacements(
-      seaStates.reduce(
-        (acc, s) => ({ ...acc, [s]: null }),
-        {} as Record<SeaState, DragItem | null>,
-      ),
-    );
-    // Полный сброс обратной связи
-    setFeedback(
-      seaStates.reduce(
-        (acc, s) => ({ ...acc, [s]: null }),
-        {} as Record<SeaState, "ok" | "wrong" | null>,
-      ),
-    );
+    setPlacements(getInitialPlacements());
+    setFeedback(getInitialFeedback());
   };
 
   return (
