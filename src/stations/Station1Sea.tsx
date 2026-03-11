@@ -25,25 +25,27 @@ type SeaState = (typeof seaStates)[number];
 type DragItem = { id: number; text: string };
 
 export default function Station1Sea({ onSuccess }: Props) {
-  // Функции для начального состояния — удобно использовать при сбросе
-  const getInitialPlacements = () =>
+  const [placements, setPlacements] = useState<
+    Record<SeaState, DragItem | null>
+  >(() =>
     seaStates.reduce(
       (acc, s) => ({ ...acc, [s]: null }),
       {} as Record<SeaState, DragItem | null>,
-    );
+    ),
+  );
 
-  const getInitialFeedback = () =>
+  const [feedback, setFeedback] = useState<
+    Record<SeaState, "ok" | "wrong" | null>
+  >(() =>
     seaStates.reduce(
       (acc, s) => ({ ...acc, [s]: null }),
       {} as Record<SeaState, "ok" | "wrong" | null>,
-    );
+    ),
+  );
 
-  const [placements, setPlacements] = useState<
-    Record<SeaState, DragItem | null>
-  >(getInitialPlacements());
-  const [feedback, setFeedback] =
-    useState<Record<SeaState, "ok" | "wrong" | null>>(getInitialFeedback());
   const [checked, setChecked] = useState(false);
+
+  const [selectedDesire, setSelectedDesire] = useState<number | null>(null);
 
   const allFilled = seaStates.every((s) => placements[s] !== null);
 
@@ -54,47 +56,45 @@ export default function Station1Sea({ onSuccess }: Props) {
       return p && desires.find((d) => d.id === p.id)?.correct === s;
     });
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    item: DragItem,
-  ) => {
-    e.dataTransfer.setData("application/json", JSON.stringify(item));
-    e.currentTarget.classList.add("dragging");
-  };
-
-  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-    e.currentTarget.classList.remove("dragging");
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, target: SeaState) => {
-    e.preventDefault();
-    try {
-      const data = e.dataTransfer.getData("application/json");
-      if (!data) return;
-      const item: DragItem = JSON.parse(data);
-
-      setPlacements((prev) => ({ ...prev, [target]: item }));
-
-      const isCorrect =
-        desires.find((d) => d.id === item.id)?.correct === target;
-
-      setFeedback((prev) => ({
-        ...prev,
-        [target]: isCorrect ? "ok" : "wrong",
-      }));
-
-      if (!isCorrect) {
-        setTimeout(() => {
-          setFeedback((prev) => ({ ...prev, [target]: null }));
-        }, 900);
-      }
-    } catch (err) {
-      console.warn("Drag parse error", err);
+  // Выбор желания (первый клик)
+  const handleSelectDesire = (id: number) => {
+    if (selectedDesire === id) {
+      setSelectedDesire(null); // отменить выбор
+    } else {
+      setSelectedDesire(id);
     }
+  };
+
+  // Второй клик — размещение
+  const handlePlace = (target: SeaState) => {
+    if (selectedDesire === null) return;
+
+    const item = desires.find((d) => d.id === selectedDesire);
+    if (!item) return;
+
+    // Если в ячейке уже что-то есть — ничего не делаем (или можно заменить)
+    if (placements[target] !== null) return;
+
+    setPlacements((prev) => ({
+      ...prev,
+      [target]: { id: item.id, text: item.text },
+    }));
+
+    const isCorrect = item.correct === target;
+
+    setFeedback((prev) => ({
+      ...prev,
+      [target]: isCorrect ? "ok" : "wrong",
+    }));
+
+    if (!isCorrect) {
+      setTimeout(() => {
+        setFeedback((prev) => ({ ...prev, [target]: null }));
+      }, 900);
+    }
+
+    // Снимаем выбор после размещения
+    setSelectedDesire(null);
   };
 
   const getStyle = (state: SeaState) => {
@@ -111,17 +111,27 @@ export default function Station1Sea({ onSuccess }: Props) {
     setChecked(true);
   };
 
-  // Полный сброс за один клик
   const handleRetry = () => {
     setChecked(false);
-    setPlacements(getInitialPlacements());
-    setFeedback(getInitialFeedback());
+    setPlacements(
+      seaStates.reduce(
+        (acc, s) => ({ ...acc, [s]: null }),
+        {} as Record<SeaState, DragItem | null>,
+      ),
+    );
+    setFeedback(
+      seaStates.reduce(
+        (acc, s) => ({ ...acc, [s]: null }),
+        {} as Record<SeaState, "ok" | "wrong" | null>,
+      ),
+    );
+    setSelectedDesire(null);
   };
 
   return (
     <div className="station1-sea">
       <h1>Море волнуется</h1>
-      <p>Перетащите каждое желание к нужному состоянию моря</p>
+      <p>Кликните на желание, потом на состояние моря</p>
 
       <div className="board">
         <div className="left-column">
@@ -132,13 +142,12 @@ export default function Station1Sea({ onSuccess }: Props) {
                 (p) => p?.id === item.id,
               );
               if (used) return null;
+
               return (
                 <div
                   key={item.id}
-                  className="card desire"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, item)}
-                  onDragEnd={handleDragEnd}
+                  className={`card desire ${selectedDesire === item.id ? "selected" : ""}`}
+                  onClick={() => handleSelectDesire(item.id)}
                 >
                   {item.text}
                 </div>
@@ -153,10 +162,9 @@ export default function Station1Sea({ onSuccess }: Props) {
             {seaStates.map((state) => (
               <div
                 key={state}
-                className="card target"
+                className={`card target ${selectedDesire !== null ? "selectable" : ""}`}
                 style={getStyle(state)}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, state)}
+                onClick={() => selectedDesire !== null && handlePlace(state)}
               >
                 <div className="state-name">{state}</div>
                 {placements[state] && (

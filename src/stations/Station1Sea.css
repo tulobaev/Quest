@@ -162,3 +162,23 @@ h2 {
   transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(239, 83, 80, 0.5);
 }
+
+/* Выделение выбранного желания */
+.card.desire.selected {
+  background: #dbeafe !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+  transform: scale(1.05);
+}
+
+/* Подсветка состояний, когда желание выбрано */
+.card.target.selectable {
+  cursor: pointer;
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.card.target.selectable:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+}
